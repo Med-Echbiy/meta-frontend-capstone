@@ -45,6 +45,7 @@ Little Lemon is a family-owned Mediterranean restaurant located in Chicago, Illi
 - **Routing**: React Router DOM
 - **State Management**: React Hooks
 - **Animation**: CSS transitions and transforms
+- **Testing**: Vitest, Testing Library, jsdom
 
 ## 📁 Project Structure
 
@@ -105,7 +106,62 @@ npm run dev          # Start development server
 npm run build        # Build for production
 npm run preview      # Preview production build
 npm run lint         # Run ESLint
+npm run test         # Run tests with Vitest
+npm run test:ui      # Run tests with UI interface
+npm run test:coverage # Run tests with coverage report
 ```
+
+## 🧪 Testing
+
+This project includes comprehensive testing for validation logic and API functions:
+
+### Test Coverage
+
+- **Reservation Form Validation**: Complete validation testing for all form fields
+- **API Functions**: Testing for booking submission and weekly specials endpoints
+- **Edge Cases**: Boundary testing and error scenarios
+- **Date Validation**: Past/future date validation
+- **Email/Phone Validation**: Format validation with multiple test cases
+
+### Running Tests
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests in watch mode
+npm test -- --watch
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run tests with UI interface
+npm run test:ui
+```
+
+### Test Structure
+
+```
+src/
+├── components/
+│   ├── api/
+│   │   └── __tests__/
+│   │       └── api.test.js           # API function tests
+│   └── pages/
+│       └── __tests__/
+│           └── reservation.test.js   # Form validation tests
+└── test/
+    └── setup.js                      # Test configuration
+```
+
+### Validation Tests Include
+
+- **Required Field Validation**: Ensures all mandatory fields are filled
+- **Date Validation**: Prevents booking for past dates
+- **Email Format Validation**: Validates proper email structure
+- **Phone Number Validation**: Supports multiple international formats
+- **Name Length Validation**: Minimum character requirements
+- **Edge Case Handling**: Whitespace, empty strings, invalid formats
 
 ## 🎨 UI Components
 
@@ -174,6 +230,9 @@ This capstone project demonstrates proficiency in:
 - State management with hooks
 - API integration and async operations
 - Form handling and validation
+- **Unit Testing with Vitest**
+- **Test-Driven Development principles**
+- **Validation logic testing**
 - Responsive web design
 - Modern CSS with Tailwind
 - User experience design principles
