@@ -46,22 +46,102 @@ export default function ReservationPage() {
     specialRequests: "",
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Reservation submitted:", formData);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    alert("Reservation submitted successfully!");
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.date) {
+      newErrors.date = "Date is required";
+    } else {
+      const selectedDate = new Date(formData.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selectedDate < today) {
+        newErrors.date = "Please select a future date";
+      }
+    }
+
+    if (!formData.time) {
+      newErrors.time = "Time is required";
+    }
+
+    if (!formData.guests) {
+      newErrors.guests = "Number of guests is required";
+    }
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Full name is required";
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters long";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email address is required";
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        newErrors.email = "Please enter a valid email address";
+      }
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else {
+      const phoneRegex = /^[+]?[1-9][\d]{0,15}$/;
+      const cleanPhone = formData.phone.replace(/[\s\-()]/g, "");
+      if (!phoneRegex.test(cleanPhone) || cleanPhone.length < 10) {
+        newErrors.phone = "Please enter a valid phone number";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    if (validateForm()) {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        console.log("Reservation submitted:", formData);
+        alert("Reservation submitted successfully!");
+
+        setFormData({
+          date: "",
+          time: "",
+          guests: "",
+          occasion: "",
+          name: "",
+          email: "",
+          phone: "",
+          specialRequests: "",
+        });
+        setErrors({});
+      } catch {
+        alert(
+          "There was an error submitting your reservation. Please try again."
+        );
+      }
+    }
+
+    setIsSubmitting(false);
   };
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
   };
 
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-
         <header className='flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4'>
           <SidebarTrigger className='-ml-1' />
           <Separator orientation='vertical' className='mr-2 h-4' />
@@ -77,7 +157,6 @@ export default function ReservationPage() {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-
 
         <main className='flex-1 bg-gradient-to-br from-primary/5 to-secondary/5'>
           <div className='min-h-screen flex items-center justify-center py-8 px-4'>
@@ -100,7 +179,6 @@ export default function ReservationPage() {
               </CardHeader>
               <CardContent className='p-6 lg:p-8'>
                 <form onSubmit={handleSubmit} className='space-y-8'>
-
                   <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
                     <div className='space-y-3'>
                       <Label
@@ -118,8 +196,17 @@ export default function ReservationPage() {
                           handleInputChange("date", e.target.value)
                         }
                         required
-                        className='h-14 text-lg bg-background border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium px-4'
+                        className={`h-14 text-lg bg-background border-2 transition-all font-medium px-4 ${
+                          errors.date
+                            ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
+                            : "border-border focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        }`}
                       />
+                      {errors.date && (
+                        <p className='text-sm text-destructive mt-1'>
+                          {errors.date}
+                        </p>
+                      )}
                     </div>
                     <div className='space-y-3'>
                       <Label
@@ -135,7 +222,13 @@ export default function ReservationPage() {
                         }
                         required
                       >
-                        <SelectTrigger className='min-h-14 w-full text-lg bg-background border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 font-medium px-4 flex items-center'>
+                        <SelectTrigger
+                          className={`min-h-14 w-full text-lg bg-background border-2 font-medium px-4 flex items-center transition-all ${
+                            errors.time
+                              ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
+                              : "border-border focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          }`}
+                        >
                           <SelectValue placeholder='Select time' />
                         </SelectTrigger>
                         <SelectContent className='bg-background border border-border shadow-xl min-w-[200px]'>
@@ -195,9 +288,13 @@ export default function ReservationPage() {
                           </SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.time && (
+                        <p className='text-sm text-destructive mt-1'>
+                          {errors.time}
+                        </p>
+                      )}
                     </div>
                   </div>
-
 
                   <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
                     <div className='space-y-3'>
@@ -214,11 +311,16 @@ export default function ReservationPage() {
                         }
                         required
                       >
-                        <SelectTrigger className='min-h-14 w-full text-lg bg-background border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 font-medium px-4 flex items-center'>
+                        <SelectTrigger
+                          className={`min-h-14 w-full text-lg bg-background border-2 font-medium px-4 flex items-center transition-all ${
+                            errors.guests
+                              ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
+                              : "border-border focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          }`}
+                        >
                           <SelectValue placeholder='Select number of guests' />
                         </SelectTrigger>
                         <SelectContent className='bg-background border border-border shadow-xl min-w-[200px]'>
-
                           <SelectItem
                             value='1'
                             className='text-lg py-3 px-4 cursor-pointer'
@@ -275,6 +377,11 @@ export default function ReservationPage() {
                           </SelectItem>
                         </SelectContent>
                       </Select>
+                      {errors.guests && (
+                        <p className='text-sm text-destructive mt-1'>
+                          {errors.guests}
+                        </p>
+                      )}
                     </div>
                     <div className='space-y-3'>
                       <Label
@@ -293,7 +400,6 @@ export default function ReservationPage() {
                           <SelectValue placeholder='Select occasion (optional)' />
                         </SelectTrigger>
                         <SelectContent className='bg-background border border-border shadow-xl min-w-[200px]'>
-
                           <SelectItem
                             value='birthday'
                             className='text-lg py-3 px-4 cursor-pointer'
@@ -335,7 +441,6 @@ export default function ReservationPage() {
                     </div>
                   </div>
 
-
                   <div className='space-y-6'>
                     <div className='border-b border-border pb-2'>
                       <h3 className='text-xl font-bold text-foreground'>
@@ -363,8 +468,17 @@ export default function ReservationPage() {
                             handleInputChange("name", e.target.value)
                           }
                           required
-                          className='h-14 text-lg bg-background border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium px-4'
+                          className={`h-14 text-lg bg-background border-2 transition-all font-medium px-4 ${
+                            errors.name
+                              ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
+                              : "border-border focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          }`}
                         />
+                        {errors.name && (
+                          <p className='text-sm text-destructive mt-1'>
+                            {errors.name}
+                          </p>
+                        )}
                       </div>
                       <div className='space-y-3'>
                         <Label
@@ -382,8 +496,17 @@ export default function ReservationPage() {
                             handleInputChange("email", e.target.value)
                           }
                           required
-                          className='h-14 text-lg bg-background border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium px-4'
+                          className={`h-14 text-lg bg-background border-2 transition-all font-medium px-4 ${
+                            errors.email
+                              ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
+                              : "border-border focus:border-primary focus:ring-2 focus:ring-primary/20"
+                          }`}
                         />
+                        {errors.email && (
+                          <p className='text-sm text-destructive mt-1'>
+                            {errors.email}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -403,11 +526,19 @@ export default function ReservationPage() {
                           handleInputChange("phone", e.target.value)
                         }
                         required
-                        className='h-14 text-lg bg-background border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium px-4'
+                        className={`h-14 text-lg bg-background border-2 transition-all font-medium px-4 ${
+                          errors.phone
+                            ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
+                            : "border-border focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        }`}
                       />
+                      {errors.phone && (
+                        <p className='text-sm text-destructive mt-1'>
+                          {errors.phone}
+                        </p>
+                      )}
                     </div>
                   </div>
-
 
                   <div className='space-y-3'>
                     <Label
@@ -427,14 +558,14 @@ export default function ReservationPage() {
                     />
                   </div>
 
-
                   <div className='pt-4'>
                     <Button
                       type='submit'
                       size='lg'
-                      className='w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]'
+                      disabled={isSubmitting}
+                      className='w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none'
                     >
-                      Submit Reservation
+                      {isSubmitting ? "Submitting..." : "Submit Reservation"}
                     </Button>
                     <p className='text-sm text-muted-foreground text-center mt-3'>
                       You'll receive a confirmation email within 24 hours

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Star,
   MapPin,
@@ -34,8 +36,28 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "../re-use/app-sidebar";
+import { getWeeksSpecials } from "../api/getWeeksSpecials";
 
 export default function HomePage() {
+  const [specials, setSpecials] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSpecials = async () => {
+      try {
+        const result = await getWeeksSpecials();
+        if (result.success) {
+          setSpecials(result.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch specials:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSpecials();
+  }, []);
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -117,170 +139,92 @@ export default function HomePage() {
               </div>
 
               <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto'>
-                <Card className='group overflow-hidden shadow-xl border-0 bg-card hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2'>
-                  <div className='relative overflow-hidden'>
-                    <div className='aspect-[4/3] overflow-hidden'>
-                      <img
-                        src='/images/greek-salad.jpg'
-                        alt='Fresh Greek Salad with feta, olives, and vegetables'
-                        className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-110'
-                      />
-                    </div>
-                    <div className='absolute top-4 right-4'>
-                      <Badge className='bg-primary text-primary-foreground font-bold text-lg px-4 py-2 shadow-lg'>
-                        $12.99
-                      </Badge>
-                    </div>
-                    <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
-                  </div>
-
-                  <CardContent className='p-8'>
-                    <div className='mb-4'>
-                      <CardTitle className='text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300'>
-                        Greek Salad
-                      </CardTitle>
-                      <div className='flex items-center gap-2 mb-4'>
-                        <div className='flex'>
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className='w-4 h-4 fill-primary text-primary'
-                            />
-                          ))}
+                {isLoading
+                  ? [...Array(3)].map((_, index) => (
+                      <Card
+                        key={index}
+                        className='overflow-hidden shadow-xl border-0 bg-card'
+                      >
+                        <div className='relative'>
+                          <Skeleton className='aspect-[4/3] w-full' />
                         </div>
-                        <span className='text-sm text-muted-foreground'>
-                          (4.9)
-                        </span>
-                      </div>
-                    </div>
-
-                    <CardDescription className='text-muted-foreground text-base leading-relaxed mb-6'>
-                      The famous Greek salad of crispy lettuce, peppers, olives
-                      and our Chicago style feta cheese, garnished with crunchy
-                      garlic and rosemary croutons.
-                    </CardDescription>
-
-                    <div className='flex items-center justify-between'>
-                      <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-                        <Clock className='w-4 h-4' />
-                        <span>15-20 min</span>
-                      </div>
-                      <Button className='bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold px-6 py-2 shadow-md hover:shadow-lg transition-all duration-300'>
-                        Order Now 🛵
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className='group overflow-hidden shadow-xl border-0 bg-card hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2'>
-                  <div className='relative overflow-hidden'>
-                    <div className='aspect-[4/3] overflow-hidden'>
-                      <img
-                        src='/images/restaurant-food.jpg'
-                        alt='Artisanal bruschetta with various toppings'
-                        className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-110'
-                      />
-                    </div>
-                    <div className='absolute top-4 right-4'>
-                      <Badge className='bg-primary text-primary-foreground font-bold text-lg px-4 py-2 shadow-lg'>
-                        $5.99
-                      </Badge>
-                    </div>
-                    <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
-                  </div>
-
-                  <CardContent className='p-8'>
-                    <div className='mb-4'>
-                      <CardTitle className='text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300'>
-                        Bruschetta
-                      </CardTitle>
-                      <div className='flex items-center gap-2 mb-4'>
-                        <div className='flex'>
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className='w-4 h-4 fill-primary text-primary'
+                        <CardContent className='p-8'>
+                          <div className='mb-4'>
+                            <Skeleton className='h-8 w-3/4 mb-2' />
+                            <div className='flex items-center gap-2 mb-4'>
+                              <Skeleton className='h-4 w-20' />
+                              <Skeleton className='h-4 w-12' />
+                            </div>
+                          </div>
+                          <Skeleton className='h-20 w-full mb-6' />
+                          <div className='flex items-center justify-between'>
+                            <Skeleton className='h-4 w-20' />
+                            <Skeleton className='h-10 w-24' />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  : specials.map((special) => (
+                      <Card
+                        key={special.id}
+                        className='group overflow-hidden shadow-xl border-0 bg-card hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2'
+                      >
+                        <div className='relative overflow-hidden'>
+                          <div className='aspect-[4/3] overflow-hidden'>
+                            <img
+                              src={special.image}
+                              alt={special.name}
+                              className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-110'
                             />
-                          ))}
+                          </div>
+                          <div className='absolute top-4 right-4'>
+                            <Badge className='bg-primary text-primary-foreground font-bold text-lg px-4 py-2 shadow-lg'>
+                              ${special.price}
+                            </Badge>
+                          </div>
+                          <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
                         </div>
-                        <span className='text-sm text-muted-foreground'>
-                          (4.8)
-                        </span>
-                      </div>
-                    </div>
 
-                    <CardDescription className='text-muted-foreground text-base leading-relaxed mb-6'>
-                      Our Bruschetta is made from grilled bread that has been
-                      smeared with garlic and seasoned with salt and olive oil.
-                      Topped with fresh tomatoes and basil.
-                    </CardDescription>
+                        <CardContent className='p-8'>
+                          <div className='mb-4'>
+                            <CardTitle className='text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300'>
+                              {special.name}
+                            </CardTitle>
+                            <div className='flex items-center gap-2 mb-4'>
+                              <div className='flex'>
+                                {[...Array(5)].map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className={`w-4 h-4 ${
+                                      i < Math.floor(special.rating)
+                                        ? "fill-primary text-primary"
+                                        : "text-muted-foreground"
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                              <span className='text-sm text-muted-foreground'>
+                                ({special.rating})
+                              </span>
+                            </div>
+                          </div>
 
-                    <div className='flex items-center justify-between'>
-                      <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-                        <Clock className='w-4 h-4' />
-                        <span>10-15 min</span>
-                      </div>
-                      <Button className='bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold px-6 py-2 shadow-md hover:shadow-lg transition-all duration-300'>
-                        Order Now 🛵
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                          <CardDescription className='text-muted-foreground text-base leading-relaxed mb-6'>
+                            {special.description}
+                          </CardDescription>
 
-                <Card className='group overflow-hidden shadow-xl border-0 bg-card hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2'>
-                  <div className='relative overflow-hidden'>
-                    <div className='aspect-[4/3] overflow-hidden'>
-                      <img
-                        src='/images/lemon-dessert.jpg'
-                        alt='Layered lemon dessert cake'
-                        className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-110'
-                      />
-                    </div>
-                    <div className='absolute top-4 right-4'>
-                      <Badge className='bg-primary text-primary-foreground font-bold text-lg px-4 py-2 shadow-lg'>
-                        $5.00
-                      </Badge>
-                    </div>
-                    <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
-                  </div>
-
-                  <CardContent className='p-8'>
-                    <div className='mb-4'>
-                      <CardTitle className='text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300'>
-                        Lemon Dessert
-                      </CardTitle>
-                      <div className='flex items-center gap-2 mb-4'>
-                        <div className='flex'>
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className='w-4 h-4 fill-primary text-primary'
-                            />
-                          ))}
-                        </div>
-                        <span className='text-sm text-muted-foreground'>
-                          (5.0)
-                        </span>
-                      </div>
-                    </div>
-
-                    <CardDescription className='text-muted-foreground text-base leading-relaxed mb-6'>
-                      This comes straight from grandma's recipe book, every last
-                      ingredient has been sourced and is as authentic as can be
-                      imagined. A perfect end to your meal.
-                    </CardDescription>
-
-                    <div className='flex items-center justify-between'>
-                      <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-                        <Clock className='w-4 h-4' />
-                        <span>5-10 min</span>
-                      </div>
-                      <Button className='bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold px-6 py-2 shadow-md hover:shadow-lg transition-all duration-300'>
-                        Order Now 🛵
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                          <div className='flex items-center justify-between'>
+                            <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+                              <Clock className='w-4 h-4' />
+                              <span>{special.prepTime}</span>
+                            </div>
+                            <Button className='bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold px-6 py-2 shadow-md hover:shadow-lg transition-all duration-300'>
+                              Order Now 🛵
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
               </div>
             </div>
           </section>
