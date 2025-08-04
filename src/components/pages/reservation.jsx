@@ -49,7 +49,7 @@ export default function ReservationPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Reservation submitted:", formData);
-    // Handle form submission here
+
     alert("Reservation submitted successfully!");
   };
 
@@ -61,7 +61,7 @@ export default function ReservationPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        {/* Header */}
+
         <header className='flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4'>
           <SidebarTrigger className='-ml-1' />
           <Separator orientation='vertical' className='mr-2 h-4' />
@@ -78,7 +78,7 @@ export default function ReservationPage() {
           </Breadcrumb>
         </header>
 
-        {/* Main Content */}
+
         <main className='flex-1 bg-gradient-to-br from-primary/5 to-secondary/5'>
           <div className='min-h-screen flex items-center justify-center py-8 px-4'>
             <Card className='w-full max-w-4xl mx-auto shadow-2xl border border-border bg-card'>
@@ -100,7 +100,7 @@ export default function ReservationPage() {
               </CardHeader>
               <CardContent className='p-6 lg:p-8'>
                 <form onSubmit={handleSubmit} className='space-y-8'>
-                  {/* Date and Time Row */}
+
                   <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
                     <div className='space-y-3'>
                       <Label
@@ -198,7 +198,7 @@ export default function ReservationPage() {
                     </div>
                   </div>
 
-                  {/* Guests and Occasion Row */}
+
                   <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
                     <div className='space-y-3'>
                       <Label
@@ -218,7 +218,7 @@ export default function ReservationPage() {
                           <SelectValue placeholder='Select number of guests' />
                         </SelectTrigger>
                         <SelectContent className='bg-background border border-border shadow-xl min-w-[200px]'>
-                          {/* ...existing code... */}
+
                           <SelectItem
                             value='1'
                             className='text-lg py-3 px-4 cursor-pointer'
@@ -293,7 +293,7 @@ export default function ReservationPage() {
                           <SelectValue placeholder='Select occasion (optional)' />
                         </SelectTrigger>
                         <SelectContent className='bg-background border border-border shadow-xl min-w-[200px]'>
-                          {/* ...existing code... */}
+
                           <SelectItem
                             value='birthday'
                             className='text-lg py-3 px-4 cursor-pointer'
@@ -335,7 +335,7 @@ export default function ReservationPage() {
                     </div>
                   </div>
 
-                  {/* Contact Information */}
+
                   <div className='space-y-6'>
                     <div className='border-b border-border pb-2'>
                       <h3 className='text-xl font-bold text-foreground'>
@@ -408,7 +408,7 @@ export default function ReservationPage() {
                     </div>
                   </div>
 
-                  {/* Special Requests */}
+
                   <div className='space-y-3'>
                     <Label
                       htmlFor='special-requests'
@@ -427,7 +427,7 @@ export default function ReservationPage() {
                     />
                   </div>
 
-                  {/* Submit Button */}
+
                   <div className='pt-4'>
                     <Button
                       type='submit'

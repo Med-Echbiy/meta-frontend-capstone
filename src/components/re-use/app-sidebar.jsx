@@ -4,7 +4,6 @@ import {
   Menu,
   Calendar,
   ShoppingCart,
-  LogIn,
   Phone,
   Star,
 } from "lucide-react";
@@ -26,9 +25,8 @@ import { Link } from "react-router-dom";
 const menuItems = [
   {
     title: "Home",
-    url: "#home",
+    url: "/",
     icon: Home,
-    anchor: true,
   },
   {
     title: "About",
@@ -54,23 +52,17 @@ const menuItems = [
     icon: ShoppingCart,
     anchor: false,
   },
-  {
-    title: "Login",
-    url: "#login",
-    icon: LogIn,
-    anchor: true,
-  },
 ];
 
 const quickLinks = [
   {
     title: "Contact Us",
-    url: "/contact",
+    url: "#contact",
     icon: Phone,
   },
   {
     title: "Reviews",
-    url: "/testimonials",
+    url: "#testimonials",
     icon: Star,
   },
 ];
@@ -119,10 +111,10 @@ export function AppSidebar({ ...props }) {
               {quickLinks.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link to={item.url}>
+                    <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </Link>
+                    </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

@@ -40,7 +40,6 @@ export default function HomePage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        {/* Header */}
         <header className='flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4'>
           <SidebarTrigger className='-ml-1' />
           <Separator orientation='vertical' className='mr-2 h-4' />
@@ -58,7 +57,6 @@ export default function HomePage() {
         </header>
 
         <main className='flex-1'>
-          {/* Hero Section */}
           <section
             id='home'
             className='bg-gradient-to-br from-primary/20 to-secondary/10 py-16 lg:py-24'
@@ -107,7 +105,6 @@ export default function HomePage() {
           </section>
           <section id='menu' className='py-20 lg:py-28 bg-background'>
             <div className='container mx-auto px-4'>
-              {/* Section Header */}
               <div className='text-center mb-16'>
                 <h2 className='text-4xl lg:text-6xl font-bold text-foreground mb-6'>
                   This Week's Specials!
@@ -117,17 +114,9 @@ export default function HomePage() {
                   Mediterranean favorites, made fresh daily with the finest
                   ingredients.
                 </p>
-                <Button
-                  size='lg'
-                  className='bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105'
-                >
-                  View Full Menu
-                </Button>
               </div>
 
-              {/* Specials Cards Grid */}
               <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto'>
-                {/* Greek Salad */}
                 <Card className='group overflow-hidden shadow-xl border-0 bg-card hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2'>
                   <div className='relative overflow-hidden'>
                     <div className='aspect-[4/3] overflow-hidden'>
@@ -183,7 +172,6 @@ export default function HomePage() {
                   </CardContent>
                 </Card>
 
-                {/* Bruschetta */}
                 <Card className='group overflow-hidden shadow-xl border-0 bg-card hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2'>
                   <div className='relative overflow-hidden'>
                     <div className='aspect-[4/3] overflow-hidden'>
@@ -239,7 +227,6 @@ export default function HomePage() {
                   </CardContent>
                 </Card>
 
-                {/* Lemon Dessert */}
                 <Card className='group overflow-hidden shadow-xl border-0 bg-card hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2'>
                   <div className='relative overflow-hidden'>
                     <div className='aspect-[4/3] overflow-hidden'>
@@ -295,33 +282,9 @@ export default function HomePage() {
                   </CardContent>
                 </Card>
               </div>
-
-              {/* Bottom CTA */}
-              <div className='text-center mt-16'>
-                <p className='text-lg text-muted-foreground mb-6'>
-                  Can't decide? Our chefs recommend trying all three for the
-                  complete Little Lemon experience!
-                </p>
-                <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-                  <Button
-                    variant='outline'
-                    size='lg'
-                    className='border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold px-8 py-3 transition-all duration-300 bg-transparent'
-                  >
-                    View Full Menu
-                  </Button>
-                  <Button
-                    size='lg'
-                    className='bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-300'
-                  >
-                    Make Reservation
-                  </Button>
-                </div>
-              </div>
             </div>
           </section>
 
-          {/* Testimonials Section */}
           <section id='testimonials' className='py-16 lg:py-24 bg-muted/30'>
             <div className='container mx-auto px-4'>
               <h2 className='text-3xl lg:text-5xl font-bold text-center text-foreground mb-12'>
@@ -387,7 +350,6 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* About Section */}
           <section id='about' className='py-16 lg:py-24 bg-background'>
             <div className='container mx-auto px-4'>
               <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'>
@@ -423,7 +385,6 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Restaurant Interior Section */}
           <section className='py-16 lg:py-24 bg-muted/30'>
             <div className='container mx-auto px-4'>
               <div className='text-center mb-12'>
@@ -445,11 +406,9 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Footer */}
           <footer id='contact' className='bg-foreground text-background py-12'>
             <div className='container mx-auto px-4'>
               <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
-                {/* Logo */}
                 <div>
                   <div className='flex items-center gap-3 mb-4'>
                     <div>
@@ -463,7 +422,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Doormat Navigation */}
                 <div>
                   <h3 className='text-lg font-semibold mb-4 text-primary'>
                     Navigation
@@ -520,7 +478,6 @@ export default function HomePage() {
                   </ul>
                 </div>
 
-                {/* Contact */}
                 <div>
                   <h3 className='text-lg font-semibold mb-4 text-primary'>
                     Contact
@@ -543,7 +500,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Social Media Links */}
                 <div>
                   <h3 className='text-lg font-semibold mb-4 text-primary'>
                     Follow Us

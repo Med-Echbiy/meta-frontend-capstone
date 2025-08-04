@@ -1,10 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
 @import "tailwindcss";
-/* Optional: override dark mode to follow `.dark` class */
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   /* Container custom settings are no longer defined via pure theme variables. */
