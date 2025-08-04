@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Calendar, Clock, Users, PartyPopper } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  Users,
+  PartyPopper,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,6 +25,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { AppSidebar } from "@/components/re-use/app-sidebar";
 import {
   Breadcrumb,
@@ -33,6 +47,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { submitBooking } from "../api/submitBooking";
 
 export default function ReservationPage() {
   const [formData, setFormData] = useState({
@@ -48,6 +63,13 @@ export default function ReservationPage() {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogContent, setDialogContent] = useState({
+    success: false,
+    title: "",
+    message: "",
+    reservationId: "",
+  });
 
   const validateForm = () => {
     const newErrors = {};
@@ -106,25 +128,46 @@ export default function ReservationPage() {
 
     if (validateForm()) {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log("Reservation submitted:", formData);
-        alert("Reservation submitted successfully!");
+        const result = await submitBooking(formData);
 
-        setFormData({
-          date: "",
-          time: "",
-          guests: "",
-          occasion: "",
-          name: "",
-          email: "",
-          phone: "",
-          specialRequests: "",
-        });
-        setErrors({});
+        if (result.success) {
+          setDialogContent({
+            success: true,
+            title: "Reservation Confirmed!",
+            message: result.message,
+            reservationId: result.reservationId,
+          });
+          setDialogOpen(true);
+
+          setFormData({
+            date: "",
+            time: "",
+            guests: "",
+            occasion: "",
+            name: "",
+            email: "",
+            phone: "",
+            specialRequests: "",
+          });
+          setErrors({});
+        } else {
+          setDialogContent({
+            success: false,
+            title: "Reservation Failed",
+            message: result.message,
+            reservationId: "",
+          });
+          setDialogOpen(true);
+        }
       } catch {
-        alert(
-          "There was an error submitting your reservation. Please try again."
-        );
+        setDialogContent({
+          success: false,
+          title: "Error",
+          message:
+            "There was an error submitting your reservation. Please try again.",
+          reservationId: "",
+        });
+        setDialogOpen(true);
       }
     }
 
@@ -577,6 +620,52 @@ export default function ReservationPage() {
           </div>
         </main>
       </SidebarInset>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className='sm:max-w-md'>
+          <DialogHeader>
+            <div className='flex items-center gap-2 mb-2'>
+              {dialogContent.success ? (
+                <CheckCircle className='h-6 w-6 text-green-500' />
+              ) : (
+                <XCircle className='h-6 w-6 text-red-500' />
+              )}
+              <DialogTitle
+                className={
+                  dialogContent.success ? "text-green-700" : "text-red-700"
+                }
+              >
+                {dialogContent.title}
+              </DialogTitle>
+            </div>
+            <DialogDescription className='text-base'>
+              {dialogContent.message}
+            </DialogDescription>
+            {dialogContent.success && dialogContent.reservationId && (
+              <div className='mt-4 p-3 bg-green-50 rounded-lg border border-green-200'>
+                <p className='text-sm font-medium text-green-800'>
+                  Reservation ID: {dialogContent.reservationId}
+                </p>
+                <p className='text-xs text-green-600 mt-1'>
+                  Please save this ID for your records
+                </p>
+              </div>
+            )}
+          </DialogHeader>
+          <div className='flex justify-center mt-4'>
+            <Button
+              onClick={() => setDialogOpen(false)}
+              className={`px-6 ${
+                dialogContent.success
+                  ? "bg-green-600 hover:bg-green-700"
+                  : "bg-red-600 hover:bg-red-700"
+              }`}
+            >
+              Close
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </SidebarProvider>
   );
 }
