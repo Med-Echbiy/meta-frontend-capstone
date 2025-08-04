@@ -94,7 +94,7 @@ export default function ReservationPage() {
     }
 
     if (!formData.name.trim()) {
-      newErrors.name = "Full name is required";
+      newErrors.name = "Full name is ";
     } else if (formData.name.trim().length < 2) {
       newErrors.name = "Name must be at least 2 characters long";
     }
@@ -238,7 +238,6 @@ export default function ReservationPage() {
                         onChange={(e) =>
                           handleInputChange("date", e.target.value)
                         }
-                        required
                         className={`h-14 text-lg bg-background border-2 transition-all font-medium px-4 ${
                           errors.date
                             ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
@@ -246,7 +245,7 @@ export default function ReservationPage() {
                         }`}
                       />
                       {errors.date && (
-                        <p className='text-sm text-destructive mt-1'>
+                        <p className='text-sm text-red-600 mt-1'>
                           {errors.date}
                         </p>
                       )}
@@ -263,7 +262,6 @@ export default function ReservationPage() {
                         onValueChange={(value) =>
                           handleInputChange("time", value)
                         }
-                        required
                       >
                         <SelectTrigger
                           className={`min-h-14 w-full text-lg bg-background border-2 font-medium px-4 flex items-center transition-all ${
@@ -332,7 +330,7 @@ export default function ReservationPage() {
                         </SelectContent>
                       </Select>
                       {errors.time && (
-                        <p className='text-sm text-destructive mt-1'>
+                        <p className='text-sm text-red-600 mt-1'>
                           {errors.time}
                         </p>
                       )}
@@ -352,7 +350,6 @@ export default function ReservationPage() {
                         onValueChange={(value) =>
                           handleInputChange("guests", value)
                         }
-                        required
                       >
                         <SelectTrigger
                           className={`min-h-14 w-full text-lg bg-background border-2 font-medium px-4 flex items-center transition-all ${
@@ -421,7 +418,7 @@ export default function ReservationPage() {
                         </SelectContent>
                       </Select>
                       {errors.guests && (
-                        <p className='text-sm text-destructive mt-1'>
+                        <p className='text-sm text-red-600 mt-1'>
                           {errors.guests}
                         </p>
                       )}
@@ -510,7 +507,6 @@ export default function ReservationPage() {
                           onChange={(e) =>
                             handleInputChange("name", e.target.value)
                           }
-                          required
                           className={`h-14 text-lg bg-background border-2 transition-all font-medium px-4 ${
                             errors.name
                               ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
@@ -518,7 +514,7 @@ export default function ReservationPage() {
                           }`}
                         />
                         {errors.name && (
-                          <p className='text-sm text-destructive mt-1'>
+                          <p className='text-sm text-red-600 mt-1'>
                             {errors.name}
                           </p>
                         )}
@@ -538,7 +534,6 @@ export default function ReservationPage() {
                           onChange={(e) =>
                             handleInputChange("email", e.target.value)
                           }
-                          required
                           className={`h-14 text-lg bg-background border-2 transition-all font-medium px-4 ${
                             errors.email
                               ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
@@ -546,7 +541,7 @@ export default function ReservationPage() {
                           }`}
                         />
                         {errors.email && (
-                          <p className='text-sm text-destructive mt-1'>
+                          <p className='text-sm text-red-600 mt-1'>
                             {errors.email}
                           </p>
                         )}
@@ -568,7 +563,6 @@ export default function ReservationPage() {
                         onChange={(e) =>
                           handleInputChange("phone", e.target.value)
                         }
-                        required
                         className={`h-14 text-lg bg-background border-2 transition-all font-medium px-4 ${
                           errors.phone
                             ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
@@ -576,7 +570,7 @@ export default function ReservationPage() {
                         }`}
                       />
                       {errors.phone && (
-                        <p className='text-sm text-destructive mt-1'>
+                        <p className='text-sm text-red-600 mt-1'>
                           {errors.phone}
                         </p>
                       )}
